@@ -1,0 +1,78 @@
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        
+        if(matrix.length == 0){
+            return 0;
+        }
+        
+        int ans = 0;
+		int arr[] = new int[matrix[0].length];
+
+		int pointer = 0;
+		while (pointer < matrix.length) {
+			for (int i = 0; i < matrix[0].length; i++) {
+				if (matrix[pointer][i] == '1') {
+					arr[i] += 1;
+				} else {
+					arr[i] = 0;
+				}
+			}
+			int left[] = new int[matrix[0].length];
+			int right[] = new int[matrix[0].length];
+
+			int pointer1 = 0;
+			while (pointer1 < arr.length) {
+				int pointer2 = pointer1 + 1;
+				while (pointer2 < arr.length) {
+					if (arr[pointer1] == 0) {
+						left[pointer1] = 0;
+						break;
+					} else if (arr[pointer2] >= arr[pointer1]) {
+						pointer2++;
+					} else if (arr[pointer2] < arr[pointer1]) {
+						break;
+					}
+				}
+				int index = pointer2 - pointer1;
+				int a = index * arr[pointer1];
+				left[pointer1] = a;
+				pointer1++;
+			}
+
+			int pointer3 = arr.length - 1;
+			while (pointer3 >= 0) {
+				int pointer4 = pointer3 - 1;
+				while (pointer4 >= 0) {
+					if (arr[pointer3] == 0) {
+						right[pointer3] = 0;
+						break;
+					} else if (arr[pointer4] >= arr[pointer3]) {
+						pointer4--;
+					} else if (arr[pointer4] < arr[pointer3]) {
+						break;
+					}
+				}
+				int index = pointer3 - pointer4;
+				int a = index * arr[pointer3];
+				right[pointer3] = a;
+				pointer3--;
+			}
+
+			int val = Integer.MIN_VALUE;
+
+			for (int k = 0; k < arr.length; k++) {
+				int val1 = left[k];
+				int val2 = right[k];
+				int ans1 = (val1 + val2) - arr[k];
+				if (ans1 > val) {
+					val = ans1;
+				}
+			}
+			if (val > ans) {
+				ans = val;
+			}
+			pointer++;
+		}
+		return ans;
+    }
+}
